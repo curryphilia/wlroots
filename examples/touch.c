@@ -215,7 +215,7 @@ static void new_input_notify(struct wl_listener *listener, void *data) {
 		xkb_context_unref(context);
 		break;
 	case WLR_INPUT_DEVICE_TOUCH:;
-		struct touch_state *tstate = calloc(sizeof(struct touch_state), 1);
+		struct touch_state *tstate = calloc(1, sizeof(struct touch_state));
 		tstate->device = device;
 		tstate->sample = sample;
 		tstate->destroy.notify = touch_destroy_notify;

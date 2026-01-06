@@ -1,4 +1,6 @@
 #define _POSIX_C_SOURCE 199309L
+#include <libavcodec/avcodec.h>
+#include <libavutil/avutil.h>
 #include <libavformat/avformat.h>
 #include <libavutil/display.h>
 #include <libavutil/hwcontext_drm.h>
@@ -520,7 +522,7 @@ static void *vid_encode_thread(void *arg) {
 		};
 
 		av_log(ctx, AV_LOG_INFO, "Encoded frame %i (%i in queue)\n",
-				ctx->avctx->frame_number, get_fifo_size(&ctx->vid_frames));
+				ctx->avctx->frame_num, get_fifo_size(&ctx->vid_frames));
 
 	} while (!ctx->err);
 
@@ -619,12 +621,12 @@ static int init_encoding(struct capture_context *ctx) {
 	}
 
 	/* Find encoder */
-	AVCodec *out_codec = avcodec_find_encoder_by_name(ctx->encoder_name);
+	const AVCodec *out_codec = avcodec_find_encoder_by_name(ctx->encoder_name);
 	if (!out_codec) {
 		av_log(ctx, AV_LOG_ERROR, "Codec not found (not compiled in lavc?)!\n");
 		return AVERROR(EINVAL);
 	}
-	ctx->avf->oformat->video_codec = out_codec->id;
+	//ctx->avf->oformat->video_codec = out_codec->id;
 	ctx->is_software_encoder = !(out_codec->capabilities & AV_CODEC_CAP_HARDWARE);
 
 	ctx->avctx = avcodec_alloc_context3(out_codec);
@@ -894,7 +896,7 @@ static void uninit(struct capture_context *ctx) {
 
 	av_dict_free(&ctx->encoder_opts);
 
-	avcodec_close(ctx->avctx);
+	avcodec_free_context(&ctx->avctx);
 	if (ctx->avf) {
 		avio_closep(&ctx->avf->pb);
 	}

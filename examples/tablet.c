@@ -304,7 +304,7 @@ static void new_input_notify(struct wl_listener *listener, void *data) {
 		xkb_context_unref(context);
 		break;
 	case WLR_INPUT_DEVICE_TABLET_PAD:;
-		struct tablet_pad_state *pstate = calloc(sizeof(struct tablet_pad_state), 1);
+		struct tablet_pad_state *pstate = calloc(1, sizeof(struct tablet_pad_state) );
 		pstate->device = device;
 		pstate->sample = sample;
 		pstate->destroy.notify = tablet_pad_destroy_notify;
@@ -321,7 +321,7 @@ static void new_input_notify(struct wl_listener *listener, void *data) {
 		sample->height_mm = device->height_mm == 0 ?
 			10 : device->height_mm;
 
-		struct tablet_tool_state *tstate = calloc(sizeof(struct tablet_tool_state), 1);
+		struct tablet_tool_state *tstate = calloc(1,sizeof(struct tablet_tool_state));
 		tstate->device = device;
 		tstate->sample = sample;
 		tstate->destroy.notify = tablet_tool_destroy_notify;

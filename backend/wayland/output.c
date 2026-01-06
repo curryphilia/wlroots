@@ -519,7 +519,7 @@ struct wlr_output *wlr_wl_output_create(struct wlr_backend *wlr_backend) {
 	}
 
 	struct wlr_wl_output *output;
-	if (!(output = calloc(sizeof(struct wlr_wl_output), 1))) {
+	if (!(output = calloc(1, sizeof(struct wlr_wl_output)))) {
 		wlr_log(WLR_ERROR, "Failed to allocate wlr_wl_output");
 		return NULL;
 	}
